@@ -1,36 +1,36 @@
 <script>
   import store from "../shared/ExpenseStore.js";
-  //import expenseService from "../shared/ExpenseService.js";
+  import expenseServices from "../shared/ExpenseServices.js";
   let date;
   let paymentType;
   let category;
   let amount = "00.00";
   let quantity;
-  $: subtotal = amount * quantity;
+  $: subTotal = amount * quantity;
 
   function createExpense() {
-    store.update(data => {
-    let id = data.length + 1
+    /*store.update(data => {
+    let id = data.length + 1*/
     let newExpense = {
-      id: data.length + 1,
+      //id: data.length + 1,
       date,
       paymentType,
       category,
       amount: parseFloat(amount),
       quantity,
-      subtotal
+      subTotal
         }
-    return [ ...data, newExpense ]
+    /*return [ ...data, newExpense ]
 
-      })
+      })*/
 
-    /*expenseService.createExpense(newExpense).then(docRef => {
+    expenseServices.createExpense(newExpense).then(docRef => {
       store.update(data => {
         newExpense.id = docRef.id;
-        return [...data, newExpense];
+        return [ ...data, newExpense ];
       });
       initForm();
-    }); */
+    }); 
   }
 
   function initForm() {

@@ -1,28 +1,30 @@
 import { writable } from 'svelte/store'
 import { tweened } from 'svelte/motion'
 import { cubicOut } from 'svelte/easing'
-
 //easing.net
-const store = writable([
-    {
-        id: 1,
-        date: '1er',
-        paymentType: 'prélèvement automatique',
-        category: 'loyer',
-        amount: 600,
-        quantity: 1,
-        subtotal: 600
-    },
-    {
-        id: 2,
-        date: '3',
-        paymentType: 'prélèvement automatique',
-        category: 'abonnement internet',
-        amount: 39,
-        quantity: 1,
-        subtotal: 39
-    }
-])
+import expenseServices from './ExpenseServices.js'
+
+let expensesFirestore = []
+const store = writable([])
+
+expenseServices.readExpense().then(querySnapshot => {
+    querySnapshot.forEach(doc => {
+        expensesFirestore = [
+            ...expensesFirestore,
+            {
+                id: doc.id,
+                date: doc.data().date,
+                amount: parseFloat(doc.data().amount),
+                paymentType: doc.data().paymentType,
+                category: doc.data().category,
+                quantity: doc.data().quantity,
+                subTotal: parseFloat(doc.data().subTotal)
+            }
+        ]
+    })
+    store.set(expensesFirestore)
+    console.log(store)
+}).catch(err => console.error(err.message))
 
 export const totalTweenStore = tweened(0, {
     delay: 1200,

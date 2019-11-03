@@ -5,7 +5,7 @@
   
   store.subscribe(data => {
     total = data.reduce((acc, curr) => {
-      return curr.subtotal + acc;
+      return curr.subTotal + acc;
     }, 0);
     totalTweenStore.set(total);
   });
